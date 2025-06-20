@@ -25,16 +25,16 @@ export default function InternLoginPage() {
     setLoading(true)
     setError("")
 
-    const { error } = await signIn(email, password)
+    if (!email.trim() || !password) {
+      setError("Please enter both email and password")
+      setLoading(false)
+      return
+    }
+
+    const { error } = await signIn(email.trim().toLowerCase(), password)
 
     if (error) {
-      if (error.includes("Invalid login credentials")) {
-        setError("Invalid credentials. For testing, use: intern@iih.ng / password123 or create a new intern account.")
-      } else if (error.includes("Email not confirmed")) {
-        setError("Please check your email and click the confirmation link before signing in.")
-      } else {
-        setError(error)
-      }
+      setError(error)
       setLoading(false)
     } else {
       // Redirect will be handled by ProtectedRoute based on user role
@@ -58,9 +58,8 @@ export default function InternLoginPage() {
           <Alert className="mb-4">
             <AlertTriangle className="h-4 w-4" />
             <AlertDescription>
-              <strong>Test Credentials:</strong> intern@iih.ng / password123
-              <br />
-              Or create a new intern account to get started.
+              <strong>Having trouble signing in?</strong><br />
+              Make sure you've confirmed your email address by clicking the link sent to your inbox.
             </AlertDescription>
           </Alert>
 
@@ -80,6 +79,7 @@ export default function InternLoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="your.email@example.com"
+                autoComplete="email"
               />
             </div>
 
@@ -92,6 +92,7 @@ export default function InternLoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 placeholder="Enter your password"
+                autoComplete="current-password"
               />
             </div>
 

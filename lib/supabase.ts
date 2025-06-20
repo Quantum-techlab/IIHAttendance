@@ -2,19 +2,27 @@
 
 import { createClient } from "@supabase/supabase-js"
 
-// Validate environment variables
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+// Get environment variables
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
+// Validate environment variables
 if (!supabaseUrl || !supabaseAnonKey) {
-  console.warn("Supabase environment variables not configured. Some features may not work.")
+  throw new Error("Missing Supabase environment variables")
 }
 
-// Create a singleton Supabase client with fallback values
-export const supabase = createClient(
-  supabaseUrl || "https://placeholder.supabase.co",
-  supabaseAnonKey || "placeholder-key",
-)
+if (supabaseUrl === "your-supabase-url" || supabaseAnonKey === "your-supabase-anon-key") {
+  throw new Error("Please update your Supabase environment variables")
+}
+
+// Create Supabase client
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: true,
+  },
+})
 
 export type Database = {
   public: {
