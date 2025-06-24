@@ -33,7 +33,7 @@ A modern, secure, and role-based web application designed to manage and track in
 
 ### 1. Clone the Repository
 
-```bash
+\`\`\`bash
 git clone https://github.com/Quantum-techlab/IIHAttendance.git
 cd IIHAttendance
 
